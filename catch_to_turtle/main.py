@@ -17,7 +17,14 @@ score_writer.penup()
 score_writer.goto(0, 300)
 score_writer.write(f"Score: {score}", align="center", font=("Arial", 16, "normal"))
 
-# Player turtle 
+# Turtle for display the countdown
+count_writer = turtle.Turtle()
+count_writer.hideturtle()
+count_writer.penup()
+count_writer.goto(0, 260)
+count_writer.write(f"Time Left: {10 - click_count}", align="center", font=("Arial", 14, "normal"))
+
+# Player turtle (the one to click)
 player = turtle.Turtle()
 player.shape("turtle")
 player.shapesize(2, 2)  
@@ -37,6 +44,8 @@ def show_random_turtle():
     global click_count
     if click_count >= 10:
         player.hideturtle()
+        count_writer.clear()
+        count_writer.write("Time's up!", align="center", font=("Arial", 14, "bold"))
         return
 
     x = random.randint(-200, 200)
@@ -45,15 +54,21 @@ def show_random_turtle():
     player.showturtle()
 
     click_count += 1
-    drawing_board.ontimer(hide_and_repeat, 1000) 
-    
-# Hide turtle,call show function again
+
+    # Update countdown display
+    count_writer.clear()
+    count_writer.write(f"Time Left: {10 - click_count}", align="center", font=("Arial", 14, "normal"))
+
+    drawing_board.ontimer(hide_and_repeat, 1000)  # Hide after 1 second
+
+# Hide the turtle and call show again
 def hide_and_repeat():
     player.hideturtle()
     show_random_turtle()
 
-# Bind click event and start the game
 player.onclick(increase_score)
 show_random_turtle()
 
+
 turtle.mainloop()
+
